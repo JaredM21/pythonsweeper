@@ -1,27 +1,66 @@
 from tkinter import *
 import settings
+import utils
+from cell import Cell
 
 root = Tk()
 # Sets Window Settings
 root.configure(bg="black")
-root.geometry(f'{settings.WIDTH}x{settings.HEGHT}')
+root.geometry(f'{settings.WIDTH}x{settings.HEIGHT}')
 root.title('PySweeper')
 root.resizable(False, False)
 
 top_frame = Frame(
     root,
-    bg='red', #TODO Change Later
-    width=1920,
-    height=270
+    bg='black', 
+    width=settings.WIDTH,
+    height=utils.height_prct(25)
 )
 top_frame.place(x=0, y=0)
 
-left_frame = Frame(
-    bg = 'blue',
-    width=360,
-    height=810
+game_title = Label(
+    top_frame,
+    bg='black',
+    fg='white',
+    text='Minesweeper Game',
+    font=('', 48)
 )
-left_frame.place(x=0, y=270)
 
-#Runs Window
+game_title.place(
+    x=utils.width_prct(25), 
+    y=0
+)
+
+left_frame = Frame(
+    bg = 'black',
+    width=utils.width_prct(25),
+    height=utils.height_prct(75)
+)
+left_frame.place(x=0, y=utils.height_prct(25))
+
+center_frame = Frame(
+    bg='black',
+    width=utils.width_prct(75),
+    height=utils.height_prct(75)
+)
+center_frame.place(x=utils.width_prct(25), y=utils.height_prct(25))
+
+for x in range(settings.GRID_SIZE):
+    for y in range(settings.GRID_SIZE):
+        c = Cell(x, y)
+        c.create_btn_obj(center_frame)
+        c.cell_btn_obj.grid(
+            column=x, row=y
+        )
+
+# Call the label from the cell class
+Cell.create_cell_count_label(left_frame)
+Cell.cell_count_label_obj.place(
+    x=0, y=0
+
+)
+
+Cell.radomize_mines()
+
+#Runs Window66
 root.mainloop()
